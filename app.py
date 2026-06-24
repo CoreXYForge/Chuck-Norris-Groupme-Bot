@@ -171,10 +171,14 @@ JOKES = [
     "There is no such thing as natural selection, just a list of animals Chuck Norris allows to live."
 ]
 
-@app.route('/', methods=['POST'])
+@app.route('/', methods=['GET', 'POST'])
 def webhook():
+    # If it's just Cron-Job waking us up with a GET request
+    if request.method == 'GET':
+        return "Bot is awake!", 200
+        
+    # If it's GroupMe sending a message via POST
     data = request.get_json()
-
     if data.get('text') and data.get('sender_type') != 'bot':
         text_received = data['text'].strip().lower()
 
